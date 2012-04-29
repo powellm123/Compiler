@@ -1,0 +1,10 @@
+void main()
+{
+	int i= 5;
+	int j = 6;
+	if(i < j)
+		cout << 1;
+	else
+		cout << 2;
+	
+}

@@ -1,0 +1,31 @@
+﻿Build started 4/28/2012 11:14:42 PM.
+     1>Project "C:\Users\Michael\Documents\Visual Studio 2010\Projects\Compiler\Compiler\Compiler.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\Compiler.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt SemanticAction.cpp
+         SemanticAction.cpp
+     1>c:\users\michael\documents\visual studio 2010\projects\compiler\compiler\semanticaction.cpp(338): warning C4482: nonstandard extension used: enum 'symbleTable::AccessMod' used in qualified name
+     1>c:\users\michael\documents\visual studio 2010\projects\compiler\compiler\semanticaction.cpp(343): warning C4482: nonstandard extension used: enum 'symbleTable::Kinds' used in qualified name
+     1>c:\users\michael\documents\visual studio 2010\projects\compiler\compiler\semanticaction.cpp(343): warning C4482: nonstandard extension used: enum 'symbleTable::Kinds' used in qualified name
+     1>c:\users\michael\documents\visual studio 2010\projects\compiler\compiler\semanticaction.cpp(357): warning C4482: nonstandard extension used: enum 'symbleTable::Kinds' used in qualified name
+     1>c:\users\michael\documents\visual studio 2010\projects\compiler\compiler\semanticaction.cpp(415): warning C4930: 'symbleTable::identifertype id(void)': prototyped function not called (was a variable definition intended?)
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Michael\Documents\Visual Studio 2010\Projects\Compiler\Debug\Compiler.exe" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\Compiler.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Michael\Documents\Visual Studio 2010\Projects\Compiler\Debug\Compiler.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Michael\Documents\Visual Studio 2010\Projects\Compiler\Debug\Compiler.lib" /MACHINE:X86 Debug\Icode.obj
+         Debug\main.obj
+         Debug\SemanticAction.obj
+         Debug\symbleTable.obj
+         Debug\syntax.obj
+         Debug\Tcode.obj
+         LINK : C:\Users\Michael\Documents\Visual Studio 2010\Projects\Compiler\Debug\Compiler.exe not found or not built by the last incremental link; performing full link
+         Compiler.vcxproj -> C:\Users\Michael\Documents\Visual Studio 2010\Projects\Compiler\Debug\Compiler.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Users\Michael\Documents\Visual Studio 2010\Projects\Compiler\Debug\Compiler.exe;#1" /manifest Debug\Compiler.exe.intermediate.manifest
+       FinalizeBuildStatus:
+         Deleting file "Debug\Compiler.unsuccessfulbuild".
+         Touching "Debug\Compiler.lastbuildstate".
+     1>Done Building Project "C:\Users\Michael\Documents\Visual Studio 2010\Projects\Compiler\Compiler\Compiler.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:06.20

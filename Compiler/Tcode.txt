@@ -1,0 +1,544 @@
+#include "Tcode.h"
+namespace Tcode
+{
+	static vector<assembly> AssC;
+	static vector<Icode_h::quad> quad;
+	static vector<Icode_h::quad>::iterator currentquad;
+	void StartTcode(vector<Icode_h::quad> qi){
+
+		quad = Icode_h::get_quadlist();
+		currentquad = quad.begin();
+
+		while(currentquad != quad.end())
+		{
+			if(currentquad->instr == "LT" || currentquad->instr == "GT" || currentquad->instr == "NE" || currentquad->instr == "EQ" || currentquad->instr == "LE" || currentquad->instr == "GE")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# Boolean"));
+				Boolean();
+			}else if(currentquad->instr == "BF" || currentquad->instr == "BT")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# Branch"));
+				Branch();
+			}else if(currentquad->instr == "CALL")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# CALL"));
+				call();
+			}else if(currentquad->instr == "FRAME")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# FRAME"));
+				frame();
+			}else if(currentquad->instr == "FUNC")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# FUNC"));
+				func();
+			}else if(currentquad->instr == "JMP")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# JMP"));
+				JMP();
+			}else if(currentquad->instr == "NEWI")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# NEWI"));
+				newi();
+			}else if(currentquad->instr == "NEW")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# NEW"));
+				newa();
+			}else if(currentquad->instr == "ADD" || currentquad->instr == "ADI" 
+				|| currentquad->instr == "SUB" || currentquad->instr == "MUL" 
+				|| currentquad->instr == "DIV" || currentquad->instr == "AND" 
+				|| currentquad->instr == "OR")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# Math"));
+				Math();
+			}else if(currentquad->instr == "MOV" || currentquad->instr == "MOVI")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# MOVE"));
+				move();
+			}else if(currentquad->instr == "PUSH")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# PUSH"));
+				push();
+			}else if(currentquad->instr == "POP")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# POP"));
+				pop();
+			}else if(currentquad->instr == "PEEK")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# PEEK"));
+				peek();
+			}else if(currentquad->instr == "READ")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# READ"));
+				read();
+			}else if(currentquad->instr == "RDC")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# RDC"));
+				readC();
+			}else if(currentquad->instr == "RDI")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# RDI"));
+				readI();
+			}else if(currentquad->instr == "REF")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# REF"));
+				ref();
+			}else if(currentquad->instr == "RETURN")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# RETURN"));
+				RETURN();
+			}else if(currentquad->instr == "RTN")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# RTN"));
+				RTN();
+			}else if(currentquad->instr == "WRITE")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# WRITE"));
+				write();
+			}else if(currentquad->instr == "WRTC")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# WRTC"));
+				writeC();
+			}else if(currentquad->instr == "WRTI")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# WRTI"));
+				writeI();
+			}else if(currentquad->instr == "QUIT")
+			{
+				Tcode::AssC.push_back(assembly("\t", "\t", "#" + currentquad->operand1 +" " + currentquad->operand2 +" " + currentquad->operand3, "# QUIT"));
+				Tcode::AssC.push_back(assembly("JMP", "exit", "",""));	
+				Tcode::AssC.push_back(assembly("STR", "PC", "OUTPUT","ERROR"));	
+				Tcode::AssC.push_back(assembly("TRP", "1", "",""));
+				Tcode::AssC.push_back(assembly("TRP", "0", "","exit"));
+			}else if(currentquad->instr == "START")
+			{
+				//Tcode::AssC.push_back(assembly("", "", "", "# START"));
+				//Tcode::AssC.push_back(assembly("RUN", "R0", "START", ""));
+			}else{
+				cerr << "Not a command " << currentquad->instr; 
+			}
+
+			currentquad++;
+		}
+		storeLits();
+	}
+	void storeLits()
+	{
+		vector<symbleTable::identifertype> lists = (symbleTable::getLiters());
+		while(!lists.empty()){
+			symbleTable::identifertype id = lists.back();
+			if(id.value != "null" && id.value != "true" && id.value != "false" ){
+				if(id.data.type == "char"){
+					if(id.value.find("\\") != -1){ 
+						if(id.value.find("n") != -1)
+							Tcode::AssC.push_back(assembly(".BYT", "10" , "", id.symid));
+						if(id.value.find("r") != -1)
+							Tcode::AssC.push_back(assembly(".BYT", "13" , "", id.symid));
+						if(id.value.find("t") != -1)
+							Tcode::AssC.push_back(assembly(".BYT", "9" , "", id.symid));
+					}
+					else
+						Tcode::AssC.push_back(assembly(".BYT", id.value , "", id.symid));
+				}
+				else
+					Tcode::AssC.push_back(assembly(".INT", id.value, "", id.symid));
+			}
+			else if(id.value == "null" || id.value == "false" ){
+				Tcode::AssC.push_back(assembly(".INT", "0" , "", id.symid));				
+			}
+			else if ( id.value == "true" ){
+				Tcode::AssC.push_back(assembly(".INT", "1" , "", id.symid));
+			}
+			lists.pop_back();
+		}
+		Tcode::AssC.push_back(assembly(".INT", "stFREE", "", "FREE"));
+		Tcode::AssC.push_back(assembly(".INT", "0", "", "stFREE"));
+
+	}
+
+	void dumpTCode()
+	{
+		for(vector<assembly>::iterator it = AssC.begin(); it != AssC.end(); it++)
+		{
+			if(it->comment != "")
+				cout<<it->label<<"\t"<<it->instr<<"\t"<<it->operand1<<"\t"<<it->operand2<<"\t\t\t# "<<it->comment<<endl;
+			else
+				cout<<it->label<<"\t"<<it->instr<<"\t"<<it->operand1<<"\t"<<it->operand2<<endl;
+
+		}
+	}
+	string tostring(int i)
+	{
+		stringstream ss;
+		ss << i;
+		return ss.str();
+	}
+	string getLocation(const string& symid)
+	{
+		int x;
+		if(symid == "this")
+		{
+			x = 0;
+			stringstream ss;
+			ss<< x;
+			return ss.str();
+		}
+		else{
+			symbleTable::identifertype id = symbleTable::get_symTbl(symid);
+			string scope = id.scope.substr(0, id.scope.find_last_of('.'));
+			string func =  id.scope.substr(id.scope.find_last_of('.')+1, id.scope.size());
+			if( symbleTable::get_symTbl(scope, func).symid.find('F') != -1)
+				x = -4 * symbleTable::getLocation(symid) - 12;
+			else
+				x = 4 * symbleTable::getLocation(symid);
+		}
+
+		return symbleTable::getLitSymb(x);
+	}
+	bool isbaseType(const string& symid)
+	{
+		symbleTable::identifertype id = symbleTable::get_symTbl(symid);
+		string tp = id.data.type;
+		if(tp == "int" || tp == "bool" || tp == "char")
+		{
+			return true;
+		}
+		return false;			
+	}
+	string getnumLocation(const string& symid)
+	{
+		stringstream ss;
+		int x;
+		if(symid == "this")
+		{
+			x = -8;
+		}
+		else{
+			symbleTable::identifertype id = symbleTable::get_symTbl(symid);
+			string scope = id.scope.substr(0, id.scope.find_last_of('.'));
+			string func =  id.scope.substr(id.scope.find_last_of('.')+1, id.scope.size());
+			if( symbleTable::get_symTbl(scope, func).symid.find('F') != -1)
+				x = -4 * symbleTable::getLocation(symid) - 12;
+			else
+				x = 4 * symbleTable::getLocation(symid);
+		}
+		ss<< x;
+		return ss.str();
+	}
+	bool isLocal(const string& symid)
+	{
+		if(symid == "this")
+			return true;
+		symbleTable::identifertype id = symbleTable::get_symTbl(symid);
+		string scope = id.scope.substr(0, id.scope.find_last_of('.'));
+		string func =  id.scope.substr(id.scope.find_last_of('.')+1, id.scope.size());
+		if( symbleTable::get_symTbl(scope, func).symid.find('F') != -1)
+			return true;
+		return false;
+	}
+	void makelabel(const string& label)
+	{
+		stringstream ss;
+		if(label == "BRN")
+		{
+			ss << labelnumber++;
+			curlabelnum = label + ss.str();
+		}
+		else if(label == "BRNEND")
+		{
+			ss << labelendnum++;
+			curlabelend = label + ss.str();
+		}
+	}
+	string getlableName(const string& label)
+	{
+		if(label == "BRN")
+		{
+			return curlabelnum;// + ss.str();
+		}
+		else if(label == "BRNEND")
+		{
+			return curlabelend; // + ss.str();
+		}else{
+			return label;
+		}
+	}
+	string getCountSize(const string& func)
+	{
+		stringstream ss;
+		ss << -4 * symbleTable::getcount(symbleTable::findscopefromfunc(currentquad->operand1));
+		return ss.str();
+	}
+
+	void getLoc(const string& regis, const string& symid, const string& label)
+	{
+		
+	}
+	void getValue(const string& regis, const string& symid, const string& label)
+	{
+		
+	}
+
+	void Boolean(){
+
+
+
+		getintoRegister("R3", currentquad->operand1, currentquad->label);
+		getintoRegister("R4", currentquad->operand2, "");
+
+		if((currentquad->operand1.find('R') != -1 || currentquad->operand1.find('V') != -1 || currentquad->operand1.find('P') != -1) && !isbaseType(currentquad->operand1))
+			AssC.push_back(assembly("LDR", "R3", "R3"));
+
+		if((currentquad->operand2.find('R') != -1 || currentquad->operand2.find('V') != -1 || currentquad->operand2.find('P') != -1) && !isbaseType(currentquad->operand2))
+			AssC.push_back(assembly("LDR", "R4", "R4"));  /**/
+		
+		AssC.push_back(assembly("CMP", "R4", "R3"));
+
+		if(currentquad->instr == "LT"){
+			AssC.push_back(assembly("BLT", "R4", getlableName("BRN")) );
+		}if( currentquad->instr == "GT" ){
+			AssC.push_back(assembly("BGT", "R4", getlableName("BRN")));
+		}if( currentquad->instr == "NE"){
+			AssC.push_back(assembly("BNZ", "R4", getlableName("BRN")));
+
+		}if( currentquad->instr == "EQ"){
+			AssC.push_back(assembly("BRZ", "R4", getlableName("BRN")));
+
+		}if( currentquad->instr == "LE"){
+			AssC.push_back(assembly("BLT", "R4", getlableName("BRN")));
+			AssC.push_back(assembly("BRZ", "R4", getlableName("BRN")));
+
+		}if( currentquad->instr == "GE"){
+			AssC.push_back(assembly("BGT", "R4", getlableName("BRN")));
+			AssC.push_back(assembly("BRZ", "R4", getlableName("BRN")));
+		}
+
+		AssC.push_back(assembly("CMP", "R4", "R4", "",  "Storing false into Registor R4")); // getlableName("BRNEND")));
+		putfromRegister("R4", currentquad->operand3, "");
+		AssC.push_back(assembly("JMP", getlableName("BRNEND")));
+
+		getintoRegister("R4", symbleTable::getLitSymb(1), getlableName("BRN"), "Storing true into Registor R4");
+		putfromRegister("R4", currentquad->operand3, "");
+
+		AssC.push_back(assembly("CMP","R13", "R13", getlableName("BRNEND"), "NO OP Command"));
+	}
+	void Branch(){
+		getintoRegister("R3", currentquad->operand1, currentquad->label);
+		if(currentquad->instr == "BF")
+		{
+			AssC.push_back(assembly("BRZ","R3", currentquad->operand2 ));
+		}
+		if(currentquad->instr == "BT")
+		{
+			AssC.push_back(assembly("BNZ","R3", currentquad->operand2 ));
+		}
+	}
+	void call(){
+
+		//Get PC
+		AssC.push_back(assembly("MOV","R10","PC",currentquad->label));
+
+		//Compute Return Address
+		AssC.push_back(assembly("ADI","R10","21"));
+
+		//FP = SP
+		AssC.push_back(assembly("MOV","FP","R14", "", "Sets FP to new Frame"));
+
+		//Store Return Address 
+		AssC.push_back(assembly("STR","R10","FP"));
+
+		//Jump to function F
+		AssC.push_back(assembly("JMP",currentquad->operand1));
+
+	}
+	void frame(){
+		//Test for overflow (SP <  SL) using the space needed for the Frame
+		AssC.push_back(assembly("MOV","R1","SP",currentquad->label,  "ERROR Checking for Stack OverFlow"));
+
+		AssC.push_back(assembly("ADI", "R1", getCountSize(currentquad->operand1), ""));
+		AssC.push_back(assembly("LDR","R2","FREE"));
+
+		AssC.push_back(assembly("CMP","R1","R2"));
+		AssC.push_back(assembly("BLT","R1","ERROR"));
+
+		////Save off current FP in Register 10, this will be the PFP
+		//AssC.push_back(assembly("MOV","R10","FP"));
+
+		//Point at Current Activation Record (FP = SP)
+		AssC.push_back(assembly("MOV","R14","SP", "", "Stores Stack Pointer into Registor 14"));
+
+		//Adjust Stack Pointer for Return Address
+		AssC.push_back(assembly("ADI","SP","-4"));
+
+		//Store PFP to Top of Stack
+		AssC.push_back(assembly("STR", "FP","SP", "", "Stores Location of FP into SP"));
+
+		//Adjust Stack Pointer for PFP
+		AssC.push_back(assembly("ADI","SP","-4"));
+
+		//Store this pointer to Top of Stack
+
+		if(currentquad->operand1 == "main"){
+			AssC.push_back(assembly("LDR","R8", symbleTable::getLitSymb(0), "", "Main Storing 0 as This PTR"));
+		}
+
+		else{
+				AssC.push_back(assembly("","", "", "", "Function call Storing " + currentquad->operand2 + " as This PTR"));
+				getintoRegister("R8", currentquad->operand2, "", false);
+		}
+		AssC.push_back(assembly("STR", "R8","SP"));
+
+		//Adjust Stack Pointer for this
+		AssC.push_back(assembly("ADI","SP","-4"));
+
+	}
+	void func(){
+		//Allocate # bytes of space on the Stack for Temporary 
+		// and Local Variables. # is a negative number.
+		AssC.push_back(assembly("ADI","SP",getCountSize(currentquad->operand1), currentquad->label, "Allocates space on top of stack"));
+	}
+	void JMP(){
+		AssC.push_back(assembly("JMP",currentquad->operand1));
+	}
+	void newa(){
+	}
+	void newi(){
+		int a;
+		stringstream ss;
+		ss << stoi(currentquad->operand1) * 4;
+
+		AssC.push_back(assembly("LDR", "R3", "FREE",  currentquad->label, "STORING current FREE PTR to "));
+		putfromRegister("R3", currentquad->operand2, "", true);
+		//May be cause of errors
+		if(( currentquad->operand1.find('V') != -1 || currentquad->operand2.find('P') != -1))
+			AssC.push_back(assembly("LDR", "R3", "R3"));
+
+		AssC.push_back(assembly("ADI", "R3", ss.str(), "", "Increasing FREE then Storing it"));
+		AssC.push_back(assembly("STR", "R3", "FREE"));
+	}
+	void Math(){
+		getintoRegister("R3", currentquad->operand1, currentquad->label);
+		getintoRegister("R4", currentquad->operand2, "");
+
+		if((currentquad->operand1.find('R') != -1 || currentquad->operand1.find('V') != -1 || currentquad->operand1.find('P') != -1) && !isbaseType(currentquad->operand1))
+			AssC.push_back(assembly("LDR", "R3", "R3"));
+
+		if((currentquad->operand2.find('R') != -1 || currentquad->operand2.find('V') != -1 || currentquad->operand2.find('P') != -1) && !isbaseType(currentquad->operand2))
+			AssC.push_back(assembly("LDR", "R4", "R4")); /**/
+
+		AssC.push_back(assembly(currentquad->instr,"R4", "R3", "",  "DO Math Operation on " +currentquad->operand1 + " and" + currentquad->operand2));
+		putfromRegister("R4", currentquad->operand3, "");
+	}
+	void move(){
+		getintoRegister("R4", currentquad->operand1, currentquad->label, true);
+		putfromRegister("R4", currentquad->operand2, "");
+	}
+	void push(){
+		//if(isbaseType(currentquad->operand1))
+		getintoRegister("R3", currentquad->operand1, currentquad->label, true);	
+		
+		if((currentquad->operand1.find('R') != -1 ) && !isbaseType(currentquad->operand1))
+			AssC.push_back(assembly("LDR", "R3", "R3"));/**/
+	
+		if(symbleTable::get_symTbl(currentquad->operand1).data.type == "char")
+			AssC.push_back(assembly("STB","R3","SP", "", "Pushes onto Stack for next Function to use"));
+		else
+			AssC.push_back(assembly("STR","R3","SP", "", "Pushes onto Stack for next Function to use"));
+		AssC.push_back(assembly("ADI","SP","-4"));
+	}
+	void pop(){
+	}
+	void peek(){
+		if(symbleTable::get_symTbl(currentquad->operand1).data.type == "char")
+			AssC.push_back(assembly("LDB","R7", "SP", currentquad->label, "loads what is returned from the prev function call"));
+		else
+			AssC.push_back(assembly("LDR","R7", "SP", currentquad->label, "loads what is returned from the prev function call" ) );
+		putfromRegister("R7", currentquad->operand1, "");
+	}
+	void read(){
+	}
+	void readC(){
+		AssC.push_back(assembly("TRP","4", "", currentquad->label, "reads from keyboard, looks for char"));
+		AssC.push_back(assembly("LDB","R3", "INPUT"));
+		putfromRegister("R3", currentquad->operand1, "", true);
+	}
+	void readI(){
+		AssC.push_back(assembly("TRP","2", "", currentquad->label, "reads from keyboard, looks for int"));
+		AssC.push_back(assembly("LDR","R3", "INPUT"));
+		putfromRegister("R3", currentquad->operand1, "", true);
+	}
+	void ref(){
+		getintoRegister("R3", currentquad->operand2, currentquad->label, true);
+		if(!isLocal(currentquad->operand1) && currentquad->operand1.find('R') != -1)
+			AssC.push_back(assembly("LDR","R3","R3"));
+		//AssC.push_back(assembly("LDR","R3", "R3"));
+		string s = getnumLocation(currentquad->operand1);
+		AssC.push_back(assembly("ADI","R3", s, "", "Add Offset to R3 to get the right address"));
+		putfromRegister("R3", currentquad->operand3, "");
+	}
+
+	void RETURN(){
+		//De-allocate Current Activation Record 
+
+		AssC.push_back(assembly("LDR","R15","FP", currentquad->label, " De-Allocating Current AR "));
+		AssC.push_back(assembly("MOV","R13","FP"));
+		AssC.push_back(assembly("ADI","R13","-4"));
+		AssC.push_back(assembly("LDR","R14","R13"));
+
+		//Test for Underflow (SP > SB)
+
+		//Set Previous Frame to Current Frame and Return
+		//if(isbaseType(currentquad->operand1))
+			getintoRegister("R3", currentquad->operand1, currentquad->label, true);
+		//else
+		//	getintoRegister("R3", currentquad->operand1, currentquad->label);
+
+		if(symbleTable::get_symTbl(currentquad->operand1).data.type == "char")
+			AssC.push_back(assembly("STB", "R3","FP", "", "Stores return varible where Return address is"));
+		else
+			AssC.push_back(assembly("STR", "R3","FP", "", "Stores return varible where Return address is"));
+
+		AssC.push_back(assembly("MOV","SP","FP", "", " Set the SP and FP to new Location "));
+		AssC.push_back(assembly("MOV","FP","R14", "", " Sets the FP to the Prev Frame Pointer"));
+		AssC.push_back(assembly("JMR","R15", "", "", " Jumping back to Caller "));
+	}
+	void RTN(){
+		//De-allocate Current Activation Record
+		AssC.push_back(assembly("LDR","R15","FP", currentquad->label, " De-Allocating Current AR "));
+		AssC.push_back(assembly("MOV","R11","FP"));
+		AssC.push_back(assembly("ADI","R11","-4"));
+		AssC.push_back(assembly("LDR","R14","R11"));
+
+		//Test for Underflow (SP > SB)
+
+		//Set Previous Frame to Current Frame and Return
+		AssC.push_back(assembly("MOV","SP","FP", "", " Set the SP and FP to new Location "));
+		AssC.push_back(assembly("MOV","FP","R14", "", " Sets the FP to the Prev Frame Pointer"));
+		AssC.push_back(assembly("JMR","R15", "", "", " Jumping back to Caller "));
+	}
+	void write(){
+	}
+	void writeC(){
+		getintoRegister("R3", currentquad->operand1, currentquad->label, true);
+
+		if((currentquad->operand1.find('R') != -1 ) && !isbaseType(currentquad->operand1))
+			AssC.push_back(assembly("LDR", "R3", "R3"));
+
+		if((currentquad->operand2.find('R') != -1 ) && !isbaseType(currentquad->operand2))
+			AssC.push_back(assembly("LDR", "R4", "R4"));  /**/
+
+		AssC.push_back(assembly("STB","R3", "OUTPUT", "", "Does the write to screen"));
+		AssC.push_back(assembly("TRP","3"));
+	}
+	void writeI(){
+		getintoRegister("R3", currentquad->operand1, currentquad->label, true);
+
+		/*if((currentquad->operand1.find('R') != -1 ))// && !isbaseType(currentquad->operand1))
+			AssC.push_back(assembly("LDR", "R3", "R3"));
+
+		if((currentquad->operand2.find('R') != -1 ))// && !isbaseType(currentquad->operand2))
+			AssC.push_back(assembly("LDR", "R4", "R4"));  /**/
+
+		AssC.push_back(assembly("STR","R3", "OUTPUT", "", "Does the write to screen"));
+		AssC.push_back(assembly("TRP","1"));
+	}
+}

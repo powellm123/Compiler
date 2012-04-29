@@ -1,0 +1,18 @@
+		FRAME   	 M105  		main 
+		CALL    	 M105
+		QUIT    	 0
+ M102   FUNC   		 M102
+		MOVI    	 V101  		G103 
+		RETURN  	 this
+M104    FUNC   		 M104
+		WRTI    	 V101  		
+		RTN
+ M105   FUNC   		 M105
+		NEWI    	 4     		T1001
+		FRAME   	 M102  		T1001
+		CALL    	 M102  		
+		PEEK    	 T1000 		
+		MOV     	 L106  		T1000
+		FRAME   	 M104  		L106 
+		CALL    	 M104  		
+		RTN     	

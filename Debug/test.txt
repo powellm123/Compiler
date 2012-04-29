@@ -1,0 +1,16 @@
+class DemoC {
+       public int x;
+       DemoC(int y)
+       {
+               x = y;
+       }
+
+       public void Print() {
+               cout << x;
+       }
+}
+
+void main() {
+       DemoC dc = new DemoC(13);
+	   cout << dc.x;
+}

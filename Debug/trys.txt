@@ -1,0 +1,19 @@
+class DemoC {
+	public int x;
+	public int y;
+	DemoC(int a, int b, int c) {
+		x = a;
+		y = b;
+		cout << c;
+		cout << '\n';
+	}
+}
+
+void main() {
+	DemoC dc = new DemoC(7, 13, 15);
+
+	cout << dc.x;
+	cout << '\n';
+	cout << dc.y;
+	cout << '\n';
+}

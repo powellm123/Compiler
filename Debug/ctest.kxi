@@ -1,0 +1,28 @@
+class Cat
+{
+	public int x;
+	public Dog root;
+	Cat(int i) {
+		root = new Dog(i);
+		//cout << root;
+	}
+	public int run()
+	{
+		//cout << root;
+		//return 2;
+	}
+}
+class Dog
+{
+	public int d;
+	Dog(int i) {
+		d = i;
+	}
+}
+
+void main()
+{
+	Cat c = new Cat(5);
+	//c.run();
+	cout << c.root.d;
+}

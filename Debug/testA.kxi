@@ -1,0 +1,12 @@
+class Cat{
+	Cat(){}
+}
+
+void main()
+{
+	Cat c = new Cat();
+	int A[] = new int[1]();
+	A[0] = 5;
+	cout << A[0];
+
+}

@@ -1,0 +1,193 @@
+class iTree {
+    private iNode root;
+    private bool first;
+
+    iTree() {
+		root = null;
+    }
+
+    public bool add(int key) {
+
+		if (root == null) {
+			root = new iNode(key);
+			//cout << 'a';
+			return true;
+		}
+		else{
+			return insert(key, root);
+			
+			}
+    }
+
+    private bool insert(int key, iNode node) {
+		if (key < node.root)
+			if (node.left == null) {
+				//cout << 'l';
+				//cout << ' ';
+				node.left = new iNode(key);
+
+				return true;
+			}
+			else 
+				return insert(key, node.left);
+		else if (key > node.root)
+			if (node.right == null) {
+				//cout << 'r';
+				//cout << ' ';
+				node.right = new iNode(key);
+				return true;
+			}
+			else
+				return insert(key, node.right);
+		else
+			return false;
+    }
+
+
+    public void print() {
+		first = true;
+		inorder(root);
+		cout << '\n';
+    }
+    
+    private void inorder(iNode node) {
+		if (node == null){
+			//cout << 'q';
+			return;
+		}
+
+		inorder(node.left);
+		//cout << node.root;
+		visit(node);
+		inorder(node.right);
+    }
+
+    private void visit(iNode node) {
+		if (first) {
+			first = false;
+			cout << ' ';
+		}
+		else cout << ',';
+
+		cout << node.root;
+    }
+
+}
+
+class iNode {
+    public int root;
+    public iNode left;
+    public iNode right;
+
+    iNode(int key) {
+		root = key;
+		left = null;
+		right = null;
+	}
+}
+
+
+class Message {
+    private char msg[];
+    private int i;
+    private int end;
+
+    Message() {
+		i = 14;
+    }
+
+    private void print(int i, int end) {
+		while (i <= end) {
+			cout << msg[i];
+			i = i + 1;
+		}
+    }	
+
+    public void msg1(int elm) {
+    	cout << 'A';
+		cout << 'd';
+		cout << 'd';
+		cout << 'e';
+		cout <<  'd';
+		cout <<  ' ';
+		cout << 'E';
+		cout << 'l';	
+		cout <<  'e';
+		cout << 'm';
+		cout << 'e';
+		cout << 'n';
+		cout << 't';
+		cout << ':';
+		cout << elm;
+		cout << '\n';
+    }
+
+    public bool msg2(int elm) {
+	i = 14;
+	end = (i + 9);
+	cout << 'D';
+	cout << 'u';
+	cout << 'p';
+	cout << 'l';
+	cout << 'i';
+	cout << 'c';
+	cout << 'a';
+	cout << 't';
+	cout << 'e';
+	cout << ' ';
+
+	cout <<  'E';
+	cout << 'n';
+	cout << 't';
+	cout << 'e';
+	cout << 'r';
+	
+	cout <<  ' ';
+	cout << 'E';
+	cout << 'l';	
+	cout <<  'e';
+	cout << 'm';
+	cout << 'e';
+	cout << 'n';
+	cout << 't';
+	cout << elm;
+	cout << '\n';
+    }
+    
+    public int msg3() {
+	i = 5;
+	cout <<  ' ';
+	cout <<  ' ';
+	cout << 'E';
+	cout << 'l';	
+	cout <<  'e';
+	cout << 'm';
+	cout << 'e';
+	cout << 'n';
+	cout << 't';
+	cout << ':';
+    }
+}
+
+void main() {
+    int key;
+    iTree tree;
+    Message msg = new Message();
+    tree = new iTree();
+
+    msg.msg3();
+    cin >> key;
+    cout << '\n';
+    while (key != 0) {
+		if (tree.add(6 + key * 1000 - 3)) {
+			msg.msg1(key);
+			tree.print();
+		}
+		else 
+			msg.msg2(key);
+
+		msg.msg3();
+		cin >> key;
+		cout << '\n';
+    }
+}

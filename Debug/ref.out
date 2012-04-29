@@ -1,0 +1,720 @@
+# FRAME				,	#main this 
+START	MOV	R1,	SP			; ERROR Checking for Stack OverFlow
+	ADI	R1,	0
+	LDR	R2,	SL
+	CMP	R1,	R2
+	BLT	R1,	ERROR
+	MOV	R14,	(SP)			; Stores Stack Pointer into Registor 14
+	ADI	SP,	-4
+	STR	FP,	(SP)			; Stores Location of FP into SP
+	ADI	SP,	-4
+	LDR	R8,	l159			; Main Storing 0 as This PTR
+	STR	R8,	(SP)
+	ADI	SP,	-4
+# CALL				,	#main  
+	MOV	R10,	PC
+	ADI	R10,	50
+	MOV	FP,	R14			; Sets FP to new Frame
+	STR	R10,	(FP)
+	JMP	main	
+# QUIT				,	#  
+	JMP	exit	
+ERROR	STR	PC,	OUTPUT
+	TRP	1	
+exit	TRP	0	
+# FUNC				,	#F103  
+iTree()	ADI	SP,	0			; Allocates space on top of stack
+# MOVE				,	#l104 V101 
+						; Get l104 into registor R4 RHS = 1
+	LDR	R4,	l104			; Getting Literal null
+						; Store V101 into registor R4 RHS = 0
+	MOV	R12,	FP			; Getting Class Varible root
+	ADI	R12,	-8
+	LDR	R12,	(R12)
+	ADI	R12,	0
+	STR	R4,	(R12)
+# RETURN				,	#this  
+	LDR	R15,	(FP)			;  De-Allocating Current AR 
+	MOV	R13,	FP
+	ADI	R13,	-4
+	LDR	R14,	(R13)
+						; Get this into registor R3 RHS = 0
+	MOV	R12,	FP			; Getting Local 
+	ADI	R12,	-8
+	LDR	R3,	(R12)
+	STR	R3,	FP			; Stores return varible where Return address is
+	MOV	SP,	FP			;  Set the SP and FP to new Location 
+	MOV	FP,	R14			;  Sets the FP to the Prev Frame Pointer
+	JMR	R15				;  Jumping back to Caller 
+# FUNC				,	#F106  
+add(int)	ADI	SP,	-28			; Allocates space on top of stack
+# Boolean				,	#l104 V101 t137
+						; Get l104 into registor R3 RHS = 1
+	LDR	R3,	l104			; Getting Literal null
+						; Get V101 into registor R4 RHS = 1
+	MOV	R12,	FP			; Getting Class Varible root
+	ADI	R12,	-8
+	LDR	R12,	(R12)
+	ADI	R12,	0
+	LDR	R4,	(R12)
+	CMP	R4,	R3
+	BRZ	R4,	BRN0
+	CMP	R4,	R4			; Storing false into Registor R4
+						; Store t137 into registor R4 RHS = 0
+	MOV	R12,	FP			; Storing Local t0
+	ADI	R12,	-16
+	STR	R4,	(R12)
+	JMP	BRNEND0	
+						; Get l160 into registor R4 RHS = 1
+BRN0	LDR	R4,	l160			; Getting Literal 1
+						; Store t137 into registor R4 RHS = 0
+	MOV	R12,	FP			; Storing Local t0
+	ADI	R12,	-16
+	STR	R4,	(R12)
+BRNEND0	CMP	R13,	R13			; NO OP Command
+# Branch				,	#t137 IFSKIP0 
+						; Get t137 into registor R3 RHS = 1
+	MOV	R12,	FP			; Getting Local t0
+	ADI	R12,	-16
+	LDR	R3,	(R12)
+	BRZ	R3,	IFSKIP0
+# NEWI				,	#2 V101 
+	LDR	R3,	SL			; STORING current FREE PTR to 
+						; Store V101 into registor R3 RHS = 0
+	MOV	R12,	FP			; Getting Class Varible root
+	ADI	R12,	-8
+	LDR	R12,	(R12)
+	ADI	R12,	0
+	STR	R3,	(R12)
+	ADI	SL,	8			; Increasing FREE then Storing it
+# FRAME				,	#F122 V101 
+	MOV	R1,	SP			; ERROR Checking for Stack OverFlow
+	ADI	R1,	-4
+	LDR	R2,	SL
+	CMP	R1,	R2
+	BLT	R1,	ERROR
+	MOV	R14,	(SP)			; Stores Stack Pointer into Registor 14
+	ADI	SP,	-4
+	STR	FP,	(SP)			; Stores Location of FP into SP
+	ADI	SP,	-4
+						; Function call Storing V101 as This PTR
+						; Get V101 into registor R8 RHS = 0
+	MOV	R12,	FP			; Getting Class Varible root
+	ADI	R12,	-8
+	LDR	R12,	(R12)
+	ADI	R12,	0
+	LDR	R8,	(R12)
+	STR	R8,	(SP)
+	ADI	SP,	-4
+# PUSH				,	#P105  
+						; Get P105 into registor R3 RHS = 1
+	MOV	R12,	FP			; Getting Local key
+	ADI	R12,	-12
+	LDR	R3,	(R12)
+	STR	R3,	(SP)			; Pushes onto Stack for next Function to use
+	ADI	SP,	-4
+# CALL				,	#iNode(int)  
+	MOV	R10,	PC
+	ADI	R10,	50
+	MOV	FP,	R14			; Sets FP to new Frame
+	STR	R10,	(FP)
+	JMP	iNode(int)	
+# PEEK				,	#t138  
+	LDR	R7,	(SP)			; loads what is returned from the prev function call
+						; Store t138 into registor R7 RHS = 0
+	MOV	R12,	FP			; Storing Local t1
+	ADI	R12,	-20
+	STR	R7,	(R12)
+# MOVE				,	#t138 V101 
+						; Get t138 into registor R4 RHS = 1
+	MOV	R12,	FP			; Getting Local t1
+	ADI	R12,	-20
+	LDR	R4,	(R12)
+						; Store V101 into registor R4 RHS = 0
+	MOV	R12,	FP			; Getting Class Varible root
+	ADI	R12,	-8
+	LDR	R12,	(R12)
+	ADI	R12,	0
+	STR	R4,	(R12)
+# RETURN				,	#l108  
+	LDR	R15,	(FP)			;  De-Allocating Current AR 
+	MOV	R13,	FP
+	ADI	R13,	-4
+	LDR	R14,	(R13)
+						; Get l108 into registor R3 RHS = 1
+	LDR	R3,	l108			; Getting Literal true
+	STR	R3,	FP			; Stores return varible where Return address is
+	MOV	SP,	FP			;  Set the SP and FP to new Location 
+	MOV	FP,	R14			;  Sets the FP to the Prev Frame Pointer
+	JMR	R15				;  Jumping back to Caller 
+# JMP				,	#ELSESKIP0  
+	JMP	ELSESKIP0	
+# REF				,	#V120 V101 R139
+						; Get V101 into registor R3 RHS = 1
+IFSKIP0	MOV	R12,	FP			; Getting Class Varible root
+	ADI	R12,	-8
+	LDR	R12,	(R12)
+	ADI	R12,	0
+	LDR	R3,	(R12)
+	ADI	R3,	4			; Add Offset to R3 to get the right address
+						; Store R139 into registor R3 RHS = 0
+	MOV	R12,	FP			; Getting Object Varible R2
+	ADI	R12,	-24
+	STR	R3,	(R12)
+# NEWI				,	#2 R139 
+	LDR	R3,	SL			; STORING current FREE PTR to 
+						; Store R139 into registor R3 RHS = 0
+	MOV	R12,	FP			; Getting Object Varible R2
+	ADI	R12,	-24
+	STR	R3,	(R12)
+	ADI	SL,	8			; Increasing FREE then Storing it
+# FRAME				,	#F122 R139 
+	MOV	R1,	SP			; ERROR Checking for Stack OverFlow
+	ADI	R1,	-4
+	LDR	R2,	SL
+	CMP	R1,	R2
+	BLT	R1,	ERROR
+	MOV	R14,	(SP)			; Stores Stack Pointer into Registor 14
+	ADI	SP,	-4
+	STR	FP,	(SP)			; Stores Location of FP into SP
+	ADI	SP,	-4
+						; Function call Storing R139 as This PTR
+						; Get R139 into registor R8 RHS = 0
+	MOV	R12,	FP			; Getting Object Varible R2
+	ADI	R12,	-24
+	LDR	R8,	(R12)
+	STR	R8,	(SP)
+	ADI	SP,	-4
+# PUSH				,	#P105  
+						; Get P105 into registor R3 RHS = 1
+	MOV	R12,	FP			; Getting Local key
+	ADI	R12,	-12
+	LDR	R3,	(R12)
+	STR	R3,	(SP)			; Pushes onto Stack for next Function to use
+	ADI	SP,	-4
+# CALL				,	#iNode(int)  
+	MOV	R10,	PC
+	ADI	R10,	50
+	MOV	FP,	R14			; Sets FP to new Frame
+	STR	R10,	(FP)
+	JMP	iNode(int)	
+# PEEK				,	#t140  
+	LDR	R7,	(SP)			; loads what is returned from the prev function call
+						; Store t140 into registor R7 RHS = 0
+	MOV	R12,	FP			; Storing Local t3
+	ADI	R12,	-28
+	STR	R7,	(R12)
+# MOVE				,	#t140 R139 
+						; Get t140 into registor R4 RHS = 1
+	MOV	R12,	FP			; Getting Local t3
+	ADI	R12,	-28
+	LDR	R4,	(R12)
+						; Store R139 into registor R4 RHS = 0
+	MOV	R12,	FP			; Getting Object Varible R2
+	ADI	R12,	-24
+	STR	R4,	(R12)
+# REF				,	#V120 V101 R141
+						; Get V101 into registor R3 RHS = 1
+	MOV	R12,	FP			; Getting Class Varible root
+	ADI	R12,	-8
+	LDR	R12,	(R12)
+	ADI	R12,	0
+	LDR	R3,	(R12)
+	ADI	R3,	4			; Add Offset to R3 to get the right address
+						; Store R141 into registor R3 RHS = 0
+	MOV	R12,	FP			; Getting Object Varible R4
+	ADI	R12,	-32
+	STR	R3,	(R12)
+# REF				,	#V119 R141 R142
+						; Get R141 into registor R3 RHS = 1
+	MOV	R12,	FP			; Getting Object Varible R4
+	ADI	R12,	-32
+	LDR	R12,	(R12)
+	LDR	R3,	(R12)
+	ADI	R3,	0			; Add Offset to R3 to get the right address
+						; Store R142 into registor R3 RHS = 0
+	MOV	R12,	FP			; Getting Object Varible R5
+	ADI	R12,	-36
+	STR	R3,	(R12)
+# WRTI				,	#R142  
+						; Get R142 into registor R3 RHS = 1
+	MOV	R12,	FP			; Getting Object Varible R5
+	ADI	R12,	-36
+	LDR	R12,	(R12)
+	LDR	R3,	(R12)
+	MOV	TR,	R3			; Does the write to screen
+	TRP	1	
+# RTN				,	#  
+ELSESKIP0	LDR	R15,	(FP)			;  De-Allocating Current AR 
+	MOV	R11,	FP
+	ADI	R11,	-4
+	LDR	R14,	(R11)
+	MOV	SP,	FP			;  Set the SP and FP to new Location 
+	MOV	FP,	R14			;  Sets the FP to the Prev Frame Pointer
+	JMR	R15				;  Jumping back to Caller 
+# FUNC				,	#F110  
+print()	ADI	SP,	-20			; Allocates space on top of stack
+# REF				,	#V119 V101 R143
+						; Get V101 into registor R3 RHS = 1
+	MOV	R12,	FP			; Getting Class Varible root
+	ADI	R12,	-8
+	LDR	R12,	(R12)
+	ADI	R12,	0
+	LDR	R3,	(R12)
+	ADI	R3,	0			; Add Offset to R3 to get the right address
+						; Store R143 into registor R3 RHS = 0
+	MOV	R12,	FP			; Getting Object Varible R6
+	ADI	R12,	-12
+	STR	R3,	(R12)
+# WRTI				,	#R143  
+						; Get R143 into registor R3 RHS = 1
+	MOV	R12,	FP			; Getting Object Varible R6
+	ADI	R12,	-12
+	LDR	R12,	(R12)
+	LDR	R3,	(R12)
+	MOV	TR,	R3			; Does the write to screen
+	TRP	1	
+# WRTC				,	#l111  
+						; Get l111 into registor R3 RHS = 1
+	LDB	R3,	l111			; Getting Literal ' '
+	MOV	TR,	R3			; Does the write to screen
+	TRP	3	
+# REF				,	#V120 V101 R144
+						; Get V101 into registor R3 RHS = 1
+	MOV	R12,	FP			; Getting Class Varible root
+	ADI	R12,	-8
+	LDR	R12,	(R12)
+	ADI	R12,	0
+	LDR	R3,	(R12)
+	ADI	R3,	4			; Add Offset to R3 to get the right address
+						; Store R144 into registor R3 RHS = 0
+	MOV	R12,	FP			; Getting Object Varible R7
+	ADI	R12,	-16
+	STR	R3,	(R12)
+# Boolean				,	#l104 R144 t145
+						; Get l104 into registor R3 RHS = 1
+	LDR	R3,	l104			; Getting Literal null
+						; Get R144 into registor R4 RHS = 1
+	MOV	R12,	FP			; Getting Object Varible R7
+	ADI	R12,	-16
+	LDR	R12,	(R12)
+	LDR	R4,	(R12)
+	CMP	R4,	R3
+	BNZ	R4,	BRN1
+	CMP	R4,	R4			; Storing false into Registor R4
+						; Store t145 into registor R4 RHS = 0
+	MOV	R12,	FP			; Storing Local t8
+	ADI	R12,	-20
+	STR	R4,	(R12)
+	JMP	BRNEND1	
+						; Get l160 into registor R4 RHS = 1
+BRN1	LDR	R4,	l160			; Getting Literal 1
+						; Store t145 into registor R4 RHS = 0
+	MOV	R12,	FP			; Storing Local t8
+	ADI	R12,	-20
+	STR	R4,	(R12)
+BRNEND1	CMP	R13,	R13			; NO OP Command
+# Branch				,	#t145 IFSKIP1 
+						; Get t145 into registor R3 RHS = 1
+	MOV	R12,	FP			; Getting Local t8
+	ADI	R12,	-20
+	LDR	R3,	(R12)
+	BRZ	R3,	IFSKIP1
+# WRTC				,	#l113  
+						; Get l113 into registor R3 RHS = 1
+	LDB	R3,	l113			; Getting Literal 'a'
+	MOV	TR,	R3			; Does the write to screen
+	TRP	3	
+# WRTC				,	#l111  
+						; Get l111 into registor R3 RHS = 1
+	LDB	R3,	l111			; Getting Literal ' '
+	MOV	TR,	R3			; Does the write to screen
+	TRP	3	
+# REF				,	#V120 V101 R146
+						; Get V101 into registor R3 RHS = 1
+	MOV	R12,	FP			; Getting Class Varible root
+	ADI	R12,	-8
+	LDR	R12,	(R12)
+	ADI	R12,	0
+	LDR	R3,	(R12)
+	ADI	R3,	4			; Add Offset to R3 to get the right address
+						; Store R146 into registor R3 RHS = 0
+	MOV	R12,	FP			; Getting Object Varible R9
+	ADI	R12,	-24
+	STR	R3,	(R12)
+# REF				,	#V119 R146 R147
+						; Get R146 into registor R3 RHS = 1
+	MOV	R12,	FP			; Getting Object Varible R9
+	ADI	R12,	-24
+	LDR	R12,	(R12)
+	LDR	R3,	(R12)
+	ADI	R3,	0			; Add Offset to R3 to get the right address
+						; Store R147 into registor R3 RHS = 0
+	MOV	R12,	FP			; Getting Object Varible R10
+	ADI	R12,	-28
+	STR	R3,	(R12)
+# WRTI				,	#R147  
+						; Get R147 into registor R3 RHS = 1
+	MOV	R12,	FP			; Getting Object Varible R10
+	ADI	R12,	-28
+	LDR	R12,	(R12)
+	LDR	R3,	(R12)
+	MOV	TR,	R3			; Does the write to screen
+	TRP	1	
+# JMP				,	#ELSESKIP1  
+	JMP	ELSESKIP1	
+# WRTC				,	#l115  
+						; Get l115 into registor R3 RHS = 1
+IFSKIP1	LDB	R3,	l115			; Getting Literal 'b'
+	MOV	TR,	R3			; Does the write to screen
+	TRP	3	
+# WRTC				,	#l116  
+						; Get l116 into registor R3 RHS = 1
+ELSESKIP1	LDB	R3,	l116			; Getting Literal '\n'
+	MOV	TR,	R3			; Does the write to screen
+	TRP	3	
+# RTN				,	#  
+	LDR	R15,	(FP)			;  De-Allocating Current AR 
+	MOV	R11,	FP
+	ADI	R11,	-4
+	LDR	R14,	(R11)
+	MOV	SP,	FP			;  Set the SP and FP to new Location 
+	MOV	FP,	R14			;  Sets the FP to the Prev Frame Pointer
+	JMR	R15				;  Jumping back to Caller 
+# FUNC				,	#F122  
+iNode(int)	ADI	SP,	-4			; Allocates space on top of stack
+# MOVE				,	#P121 V119 
+						; Get P121 into registor R4 RHS = 1
+	MOV	R12,	FP			; Getting Local key
+	ADI	R12,	-12
+	LDR	R4,	(R12)
+						; Store V119 into registor R4 RHS = 0
+	MOV	R12,	FP			; Getting Class Varible root
+	ADI	R12,	-8
+	LDR	R12,	(R12)
+	ADI	R12,	0
+	STR	R4,	(R12)
+# MOVE				,	#l104 V120 
+						; Get l104 into registor R4 RHS = 1
+	LDR	R4,	l104			; Getting Literal null
+						; Store V120 into registor R4 RHS = 0
+	MOV	R12,	FP			; Getting Class Varible left
+	ADI	R12,	-8
+	LDR	R12,	(R12)
+	ADI	R12,	4
+	STR	R4,	(R12)
+# RETURN				,	#this  
+	LDR	R15,	(FP)			;  De-Allocating Current AR 
+	MOV	R13,	FP
+	ADI	R13,	-4
+	LDR	R14,	(R13)
+						; Get this into registor R3 RHS = 0
+	MOV	R12,	FP			; Getting Local 
+	ADI	R12,	-8
+	LDR	R3,	(R12)
+	STR	R3,	FP			; Stores return varible where Return address is
+	MOV	SP,	FP			;  Set the SP and FP to new Location 
+	MOV	FP,	R14			;  Sets the FP to the Prev Frame Pointer
+	JMR	R15				;  Jumping back to Caller 
+# FUNC				,	#F124  
+main	ADI	SP,	-52			; Allocates space on top of stack
+# NEWI				,	#2 K126 
+	LDR	R3,	SL			; STORING current FREE PTR to 
+						; Store K126 into registor R3 RHS = 0
+	MOV	R12,	FP			; Storing Local tree
+	ADI	R12,	-16
+	STR	R3,	(R12)
+	ADI	SL,	8			; Increasing FREE then Storing it
+# FRAME				,	#F103 K126 
+	MOV	R1,	SP			; ERROR Checking for Stack OverFlow
+	ADI	R1,	0
+	LDR	R2,	SL
+	CMP	R1,	R2
+	BLT	R1,	ERROR
+	MOV	R14,	(SP)			; Stores Stack Pointer into Registor 14
+	ADI	SP,	-4
+	STR	FP,	(SP)			; Stores Location of FP into SP
+	ADI	SP,	-4
+						; Function call Storing K126 as This PTR
+						; Get K126 into registor R8 RHS = 0
+	MOV	R12,	FP			; Getting Local tree
+	ADI	R12,	-16
+	LDR	R8,	(R12)
+	STR	R8,	(SP)
+	ADI	SP,	-4
+# CALL				,	#iTree()  
+	MOV	R10,	PC
+	ADI	R10,	50
+	MOV	FP,	R14			; Sets FP to new Frame
+	STR	R10,	(FP)
+	JMP	iTree()	
+# PEEK				,	#t148  
+	LDR	R7,	(SP)			; loads what is returned from the prev function call
+						; Store t148 into registor R7 RHS = 0
+	MOV	R12,	FP			; Storing Local t11
+	ADI	R12,	-20
+	STR	R7,	(R12)
+# MOVE				,	#t148 K126 
+						; Get t148 into registor R4 RHS = 1
+	MOV	R12,	FP			; Getting Local t11
+	ADI	R12,	-20
+	LDR	R4,	(R12)
+						; Store K126 into registor R4 RHS = 0
+	MOV	R12,	FP			; Storing Local tree
+	ADI	R12,	-16
+	STR	R4,	(R12)
+# RDI				,	#K125  
+	TRP	2				; reads from keyboard, looks for int
+	MOV	R3,	TR			; Does the write to screen
+						; Store K125 into registor R3 RHS = 0
+	MOV	R12,	FP			; Storing Local key
+	ADI	R12,	-12
+	STR	R3,	(R12)
+# WRTC				,	#l116  
+						; Get l116 into registor R3 RHS = 1
+	LDB	R3,	l116			; Getting Literal '\n'
+	MOV	TR,	R3			; Does the write to screen
+	TRP	3	
+# Math				,	#l129 K125 t149
+						; Get l129 into registor R3 RHS = 1
+	LDR	R3,	l129			; Getting Literal 1000
+						; Get K125 into registor R4 RHS = 1
+	MOV	R12,	FP			; Getting Local key
+	ADI	R12,	-12
+	LDR	R4,	(R12)
+	MUL	R4,	R3			; DO Math Operation on l129 andK125
+						; Store t149 into registor R4 RHS = 1
+	MOV	R12,	FP			; Storing Local t12
+	ADI	R12,	-24
+	STR	R4,	(R12)
+# Math				,	#t149 l128 t150
+						; Get t149 into registor R3 RHS = 1
+	MOV	R12,	FP			; Getting Local t12
+	ADI	R12,	-24
+	LDR	R3,	(R12)
+						; Get l128 into registor R4 RHS = 1
+	LDR	R4,	l128			; Getting Literal 6
+	ADD	R4,	R3			; DO Math Operation on t149 andl128
+						; Store t150 into registor R4 RHS = 1
+	MOV	R12,	FP			; Storing Local t13
+	ADI	R12,	-28
+	STR	R4,	(R12)
+# Math				,	#l130 t150 t151
+						; Get l130 into registor R3 RHS = 1
+	LDR	R3,	l130			; Getting Literal 3
+						; Get t150 into registor R4 RHS = 1
+	MOV	R12,	FP			; Getting Local t13
+	ADI	R12,	-28
+	LDR	R4,	(R12)
+	SUB	R4,	R3			; DO Math Operation on l130 andt150
+						; Store t151 into registor R4 RHS = 1
+	MOV	R12,	FP			; Storing Local t14
+	ADI	R12,	-32
+	STR	R4,	(R12)
+# FRAME				,	#F106 K126 
+	MOV	R1,	SP			; ERROR Checking for Stack OverFlow
+	ADI	R1,	-28
+	LDR	R2,	SL
+	CMP	R1,	R2
+	BLT	R1,	ERROR
+	MOV	R14,	(SP)			; Stores Stack Pointer into Registor 14
+	ADI	SP,	-4
+	STR	FP,	(SP)			; Stores Location of FP into SP
+	ADI	SP,	-4
+						; Function call Storing K126 as This PTR
+						; Get K126 into registor R8 RHS = 0
+	MOV	R12,	FP			; Getting Local tree
+	ADI	R12,	-16
+	LDR	R8,	(R12)
+	STR	R8,	(SP)
+	ADI	SP,	-4
+# PUSH				,	#t151  
+						; Get t151 into registor R3 RHS = 1
+	MOV	R12,	FP			; Getting Local t14
+	ADI	R12,	-32
+	LDR	R3,	(R12)
+	STR	R3,	(SP)			; Pushes onto Stack for next Function to use
+	ADI	SP,	-4
+# CALL				,	#add(int)  
+	MOV	R10,	PC
+	ADI	R10,	50
+	MOV	FP,	R14			; Sets FP to new Frame
+	STR	R10,	(FP)
+	JMP	add(int)	
+# PEEK				,	#t152  
+	LDR	R7,	(SP)			; loads what is returned from the prev function call
+						; Store t152 into registor R7 RHS = 0
+	MOV	R12,	FP			; Storing Local t15
+	ADI	R12,	-36
+	STR	R7,	(R12)
+# WRTC				,	#l116  
+						; Get l116 into registor R3 RHS = 1
+	LDB	R3,	l116			; Getting Literal '\n'
+	MOV	TR,	R3			; Does the write to screen
+	TRP	3	
+# FRAME				,	#F110 K126 
+	MOV	R1,	SP			; ERROR Checking for Stack OverFlow
+	ADI	R1,	-20
+	LDR	R2,	SL
+	CMP	R1,	R2
+	BLT	R1,	ERROR
+	MOV	R14,	(SP)			; Stores Stack Pointer into Registor 14
+	ADI	SP,	-4
+	STR	FP,	(SP)			; Stores Location of FP into SP
+	ADI	SP,	-4
+						; Function call Storing K126 as This PTR
+						; Get K126 into registor R8 RHS = 0
+	MOV	R12,	FP			; Getting Local tree
+	ADI	R12,	-16
+	LDR	R8,	(R12)
+	STR	R8,	(SP)
+	ADI	SP,	-4
+# CALL				,	#print()  
+	MOV	R10,	PC
+	ADI	R10,	50
+	MOV	FP,	R14			; Sets FP to new Frame
+	STR	R10,	(FP)
+	JMP	print()	
+# PEEK				,	#t153  
+	LDR	R7,	(SP)			; loads what is returned from the prev function call
+						; Store t153 into registor R7 RHS = 0
+	MOV	R12,	FP			; Storing Local t16
+	ADI	R12,	-40
+	STR	R7,	(R12)
+# RDI				,	#K125  
+	TRP	2				; reads from keyboard, looks for int
+	MOV	R3,	TR			; Does the write to screen
+						; Store K125 into registor R3 RHS = 0
+	MOV	R12,	FP			; Storing Local key
+	ADI	R12,	-12
+	STR	R3,	(R12)
+# WRTC				,	#l116  
+						; Get l116 into registor R3 RHS = 1
+	LDB	R3,	l116			; Getting Literal '\n'
+	MOV	TR,	R3			; Does the write to screen
+	TRP	3	
+# Math				,	#l129 K125 t154
+						; Get l129 into registor R3 RHS = 1
+	LDR	R3,	l129			; Getting Literal 1000
+						; Get K125 into registor R4 RHS = 1
+	MOV	R12,	FP			; Getting Local key
+	ADI	R12,	-12
+	LDR	R4,	(R12)
+	MUL	R4,	R3			; DO Math Operation on l129 andK125
+						; Store t154 into registor R4 RHS = 1
+	MOV	R12,	FP			; Storing Local t17
+	ADI	R12,	-44
+	STR	R4,	(R12)
+# Math				,	#t154 l128 t155
+						; Get t154 into registor R3 RHS = 1
+	MOV	R12,	FP			; Getting Local t17
+	ADI	R12,	-44
+	LDR	R3,	(R12)
+						; Get l128 into registor R4 RHS = 1
+	LDR	R4,	l128			; Getting Literal 6
+	ADD	R4,	R3			; DO Math Operation on t154 andl128
+						; Store t155 into registor R4 RHS = 1
+	MOV	R12,	FP			; Storing Local t18
+	ADI	R12,	-48
+	STR	R4,	(R12)
+# Math				,	#l130 t155 t156
+						; Get l130 into registor R3 RHS = 1
+	LDR	R3,	l130			; Getting Literal 3
+						; Get t155 into registor R4 RHS = 1
+	MOV	R12,	FP			; Getting Local t18
+	ADI	R12,	-48
+	LDR	R4,	(R12)
+	SUB	R4,	R3			; DO Math Operation on l130 andt155
+						; Store t156 into registor R4 RHS = 1
+	MOV	R12,	FP			; Storing Local t19
+	ADI	R12,	-52
+	STR	R4,	(R12)
+# FRAME				,	#F106 K126 
+	MOV	R1,	SP			; ERROR Checking for Stack OverFlow
+	ADI	R1,	-28
+	LDR	R2,	SL
+	CMP	R1,	R2
+	BLT	R1,	ERROR
+	MOV	R14,	(SP)			; Stores Stack Pointer into Registor 14
+	ADI	SP,	-4
+	STR	FP,	(SP)			; Stores Location of FP into SP
+	ADI	SP,	-4
+						; Function call Storing K126 as This PTR
+						; Get K126 into registor R8 RHS = 0
+	MOV	R12,	FP			; Getting Local tree
+	ADI	R12,	-16
+	LDR	R8,	(R12)
+	STR	R8,	(SP)
+	ADI	SP,	-4
+# PUSH				,	#t156  
+						; Get t156 into registor R3 RHS = 1
+	MOV	R12,	FP			; Getting Local t19
+	ADI	R12,	-52
+	LDR	R3,	(R12)
+	STR	R3,	(SP)			; Pushes onto Stack for next Function to use
+	ADI	SP,	-4
+# CALL				,	#add(int)  
+	MOV	R10,	PC
+	ADI	R10,	50
+	MOV	FP,	R14			; Sets FP to new Frame
+	STR	R10,	(FP)
+	JMP	add(int)	
+# PEEK				,	#t157  
+	LDR	R7,	(SP)			; loads what is returned from the prev function call
+						; Store t157 into registor R7 RHS = 0
+	MOV	R12,	FP			; Storing Local t20
+	ADI	R12,	-56
+	STR	R7,	(R12)
+# WRTC				,	#l116  
+						; Get l116 into registor R3 RHS = 1
+	LDB	R3,	l116			; Getting Literal '\n'
+	MOV	TR,	R3			; Does the write to screen
+	TRP	3	
+# FRAME				,	#F110 K126 
+	MOV	R1,	SP			; ERROR Checking for Stack OverFlow
+	ADI	R1,	-20
+	LDR	R2,	SL
+	CMP	R1,	R2
+	BLT	R1,	ERROR
+	MOV	R14,	(SP)			; Stores Stack Pointer into Registor 14
+	ADI	SP,	-4
+	STR	FP,	(SP)			; Stores Location of FP into SP
+	ADI	SP,	-4
+						; Function call Storing K126 as This PTR
+						; Get K126 into registor R8 RHS = 0
+	MOV	R12,	FP			; Getting Local tree
+	ADI	R12,	-16
+	LDR	R8,	(R12)
+	STR	R8,	(SP)
+	ADI	SP,	-4
+# CALL				,	#print()  
+	MOV	R10,	PC
+	ADI	R10,	50
+	MOV	FP,	R14			; Sets FP to new Frame
+	STR	R10,	(FP)
+	JMP	print()	
+# PEEK				,	#t158  
+	LDR	R7,	(SP)			; loads what is returned from the prev function call
+						; Store t158 into registor R7 RHS = 0
+	MOV	R12,	FP			; Storing Local t21
+	ADI	R12,	-60
+	STR	R7,	(R12)
+# RTN				,	#  
+	LDR	R15,	(FP)			;  De-Allocating Current AR 
+	MOV	R11,	FP
+	ADI	R11,	-4
+	LDR	R14,	(R11)
+	MOV	SP,	FP			;  Set the SP and FP to new Location 
+	MOV	FP,	R14			;  Sets the FP to the Prev Frame Pointer
+	JMR	R15				;  Jumping back to Caller 
+l160	.INT	1	
+l159	.INT	0	
+l130	.INT	3	
+l129	.INT	1000	
+l128	.INT	6	
+l116	.BYT	10	
+l115	.BYT	'b'	
+l113	.BYT	'a'	
+l111	.BYT	' '	
+l108	.INT	1	
+l104	.INT	0	

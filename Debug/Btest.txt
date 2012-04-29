@@ -1,0 +1,93 @@
+class iTree {
+    public iNode root;
+	iTree()
+	{
+		root = null;
+	}
+
+	public bool add(int key)
+	{
+		root = new iNode(key);
+//		insert(r, root);
+		//cout << root.root;		
+	}
+
+	private bool insert(int key, iNode node)
+	{
+		if(node == null){
+			//cout << key;
+			node = new iNode(key);
+			//cout << node.root;
+			return true;
+		}
+		else {
+			cout << node.root;
+			cout << ' ';
+			return insert(key, root.next);
+		}
+	}
+
+	public void print()
+	{
+		cout << root.root;
+//		inorder(root);
+		cout << '\n';
+	}
+	private void inorder(iNode node)
+	{
+		if(node == null){
+			//cout << node.root;
+			return;
+		}
+		cout << node.root;
+		cout << ' ';
+		inorder(node.next);
+	}
+}
+
+class iNode {
+    public int root;
+    public iNode next;
+
+    iNode(int key) {
+		//cout << key;
+		root = key;
+		next = null;
+	}
+}
+
+
+void main() {
+    int key;
+    iTree tree;
+    tree = new iTree();
+
+    cin >> key;
+    cout << '\n';
+
+while(key != 0){
+	tree.add(key);
+	tree.print();
+	//cout << tree.root.root;
+
+	cin >> key;
+	cout << '\n';
+}
+
+
+
+//    while (key != 0) {
+		
+//		if (tree.add(6 + key * 1000 - 3)) {
+//			msg.msg1(key);
+//			cout << tree.root.root;
+//			//tree.print();
+//		}
+//		else 
+//			msg.msg2(key);
+//
+//		msg.msg3();
+//		cin >> key;
+//		cout << '\n';
+    }
+}

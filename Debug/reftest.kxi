@@ -1,0 +1,62 @@
+class iTree {
+    private iNode root;
+	private bool first;
+    iTree() {
+		root = null;
+    }
+	
+    public bool add(int key) {
+		if (root == null) {
+			root = new iNode(key);
+			return true;
+		}
+		else{
+			root.left = new iNode(key); 
+			//cout << root.left.root;	
+		}
+    }
+			
+    public void print() {
+		cout << root.root;
+		cout << ' ';
+		if(root.left != null){
+		//	cout << 'a';
+		//	cout << ' ';
+			cout << root.left.root;
+
+		}
+		//else cout << 'b';
+		cout << ('\n');
+    }
+}
+class iNode {
+    public int root;
+    public iNode left;
+
+    iNode(int key) {
+	root = key;
+	left = null;
+    }
+}
+
+
+void main() {
+    int key;
+    iTree tree;
+    tree = new iTree();
+
+	cin >> key;
+	//cout << key;
+	cout << '\n';
+	tree.add(6 + key * 1000 - 3);
+	cout << '\n';
+	tree.print();
+
+
+	cin >> key;
+	//cout << key;
+	cout << '\n';
+	tree.add(6 + key * 1000 - 3);
+	cout << '\n';
+	tree.print();
+}

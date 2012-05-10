@@ -39,7 +39,7 @@ namespace symbleTable
 	symbleTable::identifertype get_symTbl(const string& scope, const string& varname);
 	symbleTable::identifertype getToken(const string& scope, char symid, const string& varname, Kinds kind, Data d);
 	identifertype get_symTbl(const string& symid);
-
+	bool funsign (const string& funcsig);	
 	string getLitSymb(int x);
 
 	int getLocation(const string& funcid);

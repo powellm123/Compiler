@@ -565,7 +565,10 @@ public:
 			}while(t.str1 == "" || t.str1 == "\t");
 			tokenlist.push_back(t);
 		}else{
-			t = tokenlist[tokenat];
+			if(tokenat == -1)
+				t = tokenlist[0];
+			else
+				t = tokenlist[tokenat];
 		}
 		++tokenat;
   		return t;

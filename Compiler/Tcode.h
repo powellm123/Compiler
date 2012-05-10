@@ -22,7 +22,7 @@ namespace Tcode
 	static string curlabelend = "";
 
 	string tostring(int i);
-	void StartTcode(vector<Icode_h::quad>);
+	bool StartTcode(vector<Icode_h::quad>);
 	void dumpTCode();
 
 	string getlableName(const string& label);

@@ -16,5 +16,7 @@ int main(int argc, char* argv[])
 	}
 	if(!syntax::startpass2()) // pass 2: start symbol
 		cerr<<"Success!";
+	else
+		cerr<<"Failed!";
 	return 0;
 }

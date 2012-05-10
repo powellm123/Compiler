@@ -249,6 +249,18 @@ namespace symbleTable
 		cerr<<"symble Table Error "<<scope<<"."<<varname<<" Not identifed"<<endl;
 		return emptyident;
 	}
+	bool funsign (const string& funcsig)
+	{
+		for(globalmap::iterator git = globalsymtbl.begin(); git != globalsymtbl.end(); git++)
+		{
+			for(identifermap::iterator it = git->second.begin(); it != git->second.end(); it++)
+			{
+				if(funcsig == it->second.value)
+					return true;
+			}
+		}
+		return false;
+	}
 	identifertype get_symTbl(const string& symid)
 	{
 		for(globalmap::iterator git = globalsymtbl.begin(); git != globalsymtbl.end(); git++)

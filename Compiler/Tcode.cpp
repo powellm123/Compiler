@@ -7,9 +7,9 @@ namespace Tcode
 	static vector<Icode_h::quad>::iterator currentquad;
 
 
-	void StartTcode(vector<Icode_h::quad> qi)
+	bool StartTcode(vector<Icode_h::quad> qi)
 	{
-
+		bool noerror = true;
 		quad = Icode_h::get_quadlist();
 		currentquad = quad.begin();
 
@@ -126,17 +126,16 @@ namespace Tcode
 				Tcode::AssC.push_back(assembly("TRP", "0", "",""));
 				Tcode::AssC.push_back(assembly(".BYT", "10", "","nl"));
 
-			}else if(currentquad->instr == "START")
-			{
-				//Tcode::AssC.push_back(assembly("", "", "", "# START"));
-				//Tcode::AssC.push_back(assembly("RUN", "R0", "START", ""));
+			}else if(currentquad->instr == "START"){
 			}else{
-				cerr << "Not a command " << currentquad->instr; 
+				cerr << "Not a command " << currentquad->instr<<endl; 
+				noerror = false;
 			}
 
 			currentquad++;
 		}
 		storeLits();
+		return noerror;
 	}
 	void storeLits()
 	{

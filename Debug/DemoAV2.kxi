@@ -38,7 +38,7 @@ class iTree {
     public void print() {
 	first = true;
 	inorder(root);
-	cout << ('\n');
+	cout << '\n';
     }
     
     private void inorder(iNode node) {
@@ -80,7 +80,6 @@ class Message {
     private int end;
 
     Message() {
-	int j = 0;
     	msg = new char[100];
 	msg[0] = 'A';
 	msg[1] = 'd';

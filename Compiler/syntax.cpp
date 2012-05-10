@@ -21,17 +21,23 @@ namespace syntax
 	{
 		symbleTable::dump();
 	}
-	void gen_error(token t, string str)
+	void gen_error(const token& t, const string& str)
 	{
 		if(t.str1 == "EMPTY" && str == ";"){
 			cerr<<"Need to add a space after the last }";
 			system("pause");
-			throw "end";
+			exit(0);
+			//throw "end";
 		}
 		else{
 			cerr<<t.linenum<< " Got "<<t.str1<<" Looking for "<<str<<endl;
+			cerr<<"   misspelled Statement or type could be a problem\n   or wrong combation of symbles put together"<<endl;
 			++error;
 		}
+	}
+	void gen_error(int linenum, const string& str)
+	{
+		cerr<<linenum<<" "<<str<<endl;
 	}
 	void prev_token()
 	{
@@ -290,11 +296,8 @@ namespace syntax
 	int startpass1(const string& fname)
 	{
 		pass = 1;
-		scan = new Scanner( fname); // "./test.txt");
-		//cerr << "i am a parser";
+		scan = new Scanner( fname);
 		compiliation_unit_function();
-		if(!error)
-			//symbleTable::dump();
 		return error;
 	}
 	int startpass2(const string& fname)
@@ -302,13 +305,14 @@ namespace syntax
 		pass = 2;
 		scan->restartfile();
 		compiliation_unit_function();
-		if(!SemanticAction::getErrors())
+		error = SemanticAction::getErrors();
+		if(!error)
 		{
-			//cout<<endl<<endl;
 			//Icode_h::dumpicode();
-			//cout<<endl<<endl;
-			Tcode::StartTcode(Icode_h::icode);
-			Tcode::dumpTCode();
+			if(Tcode::StartTcode(Icode_h::icode))
+				Tcode::dumpTCode();
+			else
+				++error;
 		}
 
 		return error;
@@ -322,8 +326,9 @@ namespace syntax
 		while(class_declaration_function())
 		{;}
 		token t = get_nextToken();
-		if(t.str1 != "void")
-			gen_error(t, "void");
+		if(t.str1 != "void"){
+			gen_error(t, "void or class \n Rest of Error are most likly wrong");
+		}
 		t = get_nextToken();
 		if(t.str1 != "main")
 			gen_error(t, "main");
@@ -404,7 +409,7 @@ namespace syntax
 			if(!identifier())
 			{
 				t = get_nextToken();
-				gen_error(t, "identifier");
+				gen_error(t, "identifier \n   This could be a constructor that has wrong syntax");
 			}
 			//cout<<
 			if(!field_declaration_function())
@@ -419,6 +424,11 @@ namespace syntax
 		else{
 			//prev_token();
 			if(!constructor_declaration_function()){
+
+				t = get_nextToken();
+				if(t.str1.find("}") == -1)
+					gen_error(t, "a Constructor or Function or Class Member starter");
+				prev_token();
 				return false;
 			}
 		}
@@ -507,9 +517,12 @@ namespace syntax
 		////////////////////////////////
 
 		t = get_nextToken();
-		if(t.str1 != "(")
-			gen_error(t, "(");
-
+		if(t.str1 != "("){
+			prev_token();
+			prev_token();
+			return false;
+			//gen_error(t, "( assumes that this is a constructor");
+		}
 		string curvalue = value;
 		char cursymid = 'F';
 		symbleTable::Kinds curkind = symbleTable::Func;
@@ -707,12 +720,7 @@ namespace syntax
 			if(t.str1 != "}")
 				gen_error(t, "}");
 
-			//if(pass == 2)
-			//{
-			//	Icode_h::RTN();
-			//}
 			prev_token();
-			//prev_scope();
 		}
 		else {if(t.str1 == "if")
 		{
@@ -920,7 +928,6 @@ namespace syntax
 			///////Semantic Action//////////
 			if(pass == 2){
 				SemanticAction::_oPush("(");
-				//SemanticAction::_bal();
 			}
 			///////////////////////////////
 
@@ -1010,14 +1017,19 @@ namespace syntax
 
 			if(member_refz_function(thetoken))
 			{
-				if(pass == 2 ){
-					symbleTable::identifertype id = SemanticAction::Get_topSASid();
-					if( id.symid.find('F') != -1){
+				//if(pass == 2 ){
+					//symbleTable::identifertype id = SemanticAction::Get_topSASid();
+					//if( id.symid.find('F') != -1){
 						//Icode_h::call(SemanticAction::Get_topSASid().value);
-					}
-				}
+					//}
+				//}
 			}
-			expressionz_function();
+			if(!expressionz_function()){
+				t = get_nextToken();
+				if(t.str1.find(';') == -1 && t.str1.find(',') == -1 && t.str1.find(')') == -1 && t.str1.find(']') == -1)
+					gen_error(t, "an expression modifer like * or =");
+				prev_token();
+			}
 			return true;
 		}}}}}}}
 
@@ -1025,7 +1037,6 @@ namespace syntax
 	}
 	bool fn_arr_member_function()
 	{
-		//cerr <<"FN_arrays";
 		//"(" [ argument_list ] ")" | "[" expression "]"
 		token t;
 		t = get_nextToken();
@@ -1045,11 +1056,6 @@ namespace syntax
 			if(t.str1 != ")")
 				gen_error(t, ")");
 
-			if(pass == 1)
-			{
-
-			}
-
 			///////Semantic Action/////////
 			if(pass == 2){
 				SemanticAction::_cParen();
@@ -1064,7 +1070,6 @@ namespace syntax
 		else{
 			if(t.str1 == "[")
 			{
-				//cerr << "found Array\n";
 				///////Semantic Action/////////
 				if(pass == 2){
 					SemanticAction::_oPush("[");
@@ -1329,9 +1334,9 @@ namespace syntax
 		else {if(t.str1 == "new")
 		{
 			if(!type_function())
-				gen_error(t, "");
+				gen_error( t.linenum, "No Object can be made of this type bacause its not a valid type");
 			if(!new_declaration_function())
-				gen_error(t, "");
+				gen_error( t.linenum, "No Object can be made of this type bacause its not a valid type");
 			return true;
 		}
 		else {if(t.str1 == "atoi")

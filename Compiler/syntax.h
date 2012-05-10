@@ -13,7 +13,8 @@ namespace syntax
 	void prev_scope();
 	const string& get_scope();
 	void gen_error();
-	void gen_error(token, string);
+	void gen_error(int, const string&);
+	void gen_error(const token&, const string&);
 	void prev_token();
 	token get_nextToken();
 	bool identifier();

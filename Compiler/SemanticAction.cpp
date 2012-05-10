@@ -42,7 +42,10 @@ namespace SemanticAction
 	}
 	void gen_error(const string& str, sar* s)
 	{
-		cerr<<linenum<<" SA ERROR: "<<str<<" scope " << s->_id().scope<<" value " << s->_id().value <<endl; 
+		if(s->_id().scope != "")
+			cerr<<linenum<<" SA ERROR: "<<str<<" scope " << s->_id().scope<<" value " << s->_id().value <<endl; 
+		else
+			cerr<<linenum<<" SA ERROR: A Symble is not Defined"<<endl;
 		ERRORS++;
 	}
 	void gen_error(const string& str, sar* s1, sar* s2)
@@ -172,7 +175,7 @@ namespace SemanticAction
 	}
 	bool sametype(sar *s1, sar *s2)
 	{
-		if(s1->_id().data.type == s2->_id().data.type || s1->_id().symid.find('R') != -1 || s2->_id().symid.find('R') != -1 || s1->_id().value == "null" ||  s2->_id().value == "null" )
+		if(s1->_id().data.type == s2->_id().data.type /*|| /*s1->_id().symid.find('R') != -1 || s2->_id().symid.find('R') != -1*/ || s1->_id().value == "null" ||  s2->_id().value == "null" )
 			return true;
 
 		return false;
@@ -180,6 +183,10 @@ namespace SemanticAction
 	void setScope(const string& str)
 	{
 		currentScope = str;
+	}
+	bool foundFunc(const string& fun)
+	{
+		return symbleTable::funsign(fun);
 	}
 ////////////////////////////////////////////////////////////////
 	symbleTable::identifertype Get_topSASid()
@@ -425,6 +432,10 @@ namespace SemanticAction
 			}
 		}
 		alsar->end();
+		if(SAStack.empty()){
+			cerr << "ERROR SAStack Empty"<<endl;
+			return;
+		}
 		SAStack.pop_back();
 		//SAStack.push_
 		SAStack.push_back(alsar);
@@ -624,17 +635,22 @@ namespace SemanticAction
 					pr += "," + iter->data.type;
 			}
 			pr += ")";
-			while(!prams.empty())
-			{
-				Icode_h::push(prams.back());
-				prams.pop_back();
+			string f = idsar->_id().value + pr;
+			if(foundFunc(f)){
+				while(!prams.empty())
+				{
+					Icode_h::push(prams.back());
+					prams.pop_back();
+				}
+		//		func_sar* fs = new func_sar(
+		//		if(foundintable(pr)){
+				Icode_h::call(idsar->_id().value + pr);
+				sar *temp = gensym(idsar->_id(), idsar->_id().data.type);
+				SAStack.push_back(temp);
+				Icode_h::peek(temp->_id().symid);
 			}
-
-			Icode_h::call(idsar->_id().value + pr);
-			sar *temp = gensym(idsar->_id(), idsar->_id().data.type);
-			SAStack.push_back(temp);
-			Icode_h::peek(temp->_id().symid);
-
+			else
+				gen_error("No constructor with given set pramaters " + f); 
 		}
 		else{
 			gen_error("No Argument list given", alsr);
@@ -821,16 +837,11 @@ namespace SemanticAction
 		}
 		else
 		{
-			//if(s1->_id().symid.find('F') != -1){
-			//	sar *temp = gensym(s2->_id(), s2->_id().data.type);
-			//	Icode_h::peek(temp->_id().symid);
-			//	SAStack.push_back(temp);
-			//	Icode_h::move(temp->_id().symid, s2->_id().symid);
-			//}
-			//else{
-				//SAStack.push_back(temp);
-				Icode_h::move(s1->_id().symid, s2->_id().symid);
-			//}
+			sar *temp = gensym(s2->_id(), s2->_id().data.type);
+			SAStack.push_back(temp);
+
+			Icode_h::move(s1->_id().symid, s2->_id().symid);
+			
 		}
 		
 	}
